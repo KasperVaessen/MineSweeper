@@ -3,40 +3,25 @@
 <head>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
-    <script>let size = 15;
+    <script>let size = 20;
     let board = [];
     let rightClicked = false;
     let leftClicked = false;
     let bombs = ["BOOM", "SAVEBOOM", "EXPLODED"]
+    let firstClick = true;
 
     function setup() {
-        for (let i = 0; i < size; i++) {
-            board[i] = [];
-            for (let j = 0; j < size; j++) {
-                if (random(0, 1) < 0.2) {
-                    board[i][j] = "BOOM";
-                } else {
-                    board[i][j] = ""
-                }
-            }
-        }
-
-
         createCanvas(size * 40, size * 40);
         background(255, 255, 255);
         for (let i = 1; i < size; i++) {
             line(i * 40, 0, i * 40, height);
-        }
-        for (let i = 1; i < size; i++) {
             line(0, i * 40, width, i * 40);
         }
     }
 
     function mouseClicked() {
         if(mouseX < size*40 && mouseY < size*40) {
-            if(mouseX >= 0 && mouseY >= 0) {
-                leftClicked = true;
-            }
+            leftClicked = true;
         }
     }
 
@@ -95,8 +80,13 @@
     function draw() {
         let xCoor = floor(mouseX / 40);
         let yCoor = floor(mouseY / 40);
+
         if (leftClicked) {
             leftClicked = false;
+            if(firstClick) {
+                firstClick = false;
+                init(xCoor, yCoor)
+            }
             show(xCoor, yCoor)
         }
         if (rightClicked) {
@@ -197,6 +187,45 @@
             }
         }
 
+    }
+
+    function init(x,y) {
+        console.log(x,y);
+        for (let i = 0; i < size; i++) {
+            board[i] = [];
+            for (let j = 0; j < size; j++) {
+                if (random(0, 1) < 0.2) {
+                    board[i][j] = "BOOM";
+                } else {
+                    board[i][j] = ""
+                }
+            }
+        }
+        board[x][y] = "";
+        if (x != 0 && y != 0) {
+            board[x - 1][y - 1] = ""
+        }
+        if (x != 0) {
+            board[x - 1][y] = ""
+        }
+        if (x != 0 && y != size - 1) {
+            board[x - 1][y + 1] = ""
+        }
+        if (y != 0) {
+            board[x][y - 1] = ""
+        }
+        if (y != size - 1) {
+            board[x][y + 1] = ""
+        }
+        if (x != size - 1 && y != 0) {
+            board[x + 1][y - 1] = ""
+        }
+        if (x != size - 1) {
+            board[x + 1][y] = ""
+        }
+        if (x != size - 1 && y != size - 1) {
+            board[x + 1][y + 1]  = ""
+        }
     }
 
     document.oncontextmenu = function() {
