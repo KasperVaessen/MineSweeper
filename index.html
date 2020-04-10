@@ -34,7 +34,9 @@
 
     function mouseClicked() {
         if(mouseX < size*40 && mouseY < size*40) {
-            leftClicked = true;
+            if(mouseX >= 0 && mouseY >= 0) {
+                leftClicked = true;
+            }
         }
     }
 
