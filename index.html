@@ -110,6 +110,11 @@
             fill(255, 0, 0);
             rect(x * 40, y * 40, 40, 40);
             board[x][y] = "EXPLODED"
+            for(let i = 0; i < board.length; i++) {
+                for(let j = 0; j< board[i].length; j++) {
+                    show(i,j);
+                }
+            }
         } else if (board[x][y] === "") {
             if(bombCount(x, y) === 0) {
                 fill(190, 190, 190);
