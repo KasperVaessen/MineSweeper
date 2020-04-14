@@ -9,6 +9,11 @@
     let leftClicked = false;
     let bombs = ["BOOM", "SAVEBOOM", "EXPLODED"]
     let firstClick = true;
+    let img;
+
+    function preload() {
+        img = loadImage('flag.png');
+    }
 
     function setup() {
         createCanvas(size * 40, size * 40);
@@ -20,14 +25,16 @@
     }
 
     function mouseClicked() {
-        if(mouseX < size*40 && mouseY < size*40) {
+        if(mouseX < size*40 && mouseY < size*40 && mouseX >= 0 && mouseY >= 0) {
             leftClicked = true;
         }
     }
 
     function keyPressed() {
         if (keyCode === ENTER) {
-            rightClicked = true;
+            if(mouseX < size*40 && mouseY < size*40 && mouseX >= 0 && mouseY >= 0) {
+                rightClicked = true;
+            }
         }
     }
 
@@ -106,7 +113,8 @@
                 }
             }
         } else if (board[x][y] === "") {
-            if(bombCount(x, y) === 0) {
+            let number = bombCount(x, y);
+            if(number === 0) {
                 fill(190, 190, 190);
                 rect(x * 40, y * 40, 40, 40);
                 board[x][y] = "GUESSED"
@@ -115,9 +123,34 @@
                 push()
                 board[x][y] = "GUESSED";
                 textSize(40);
-                fill(0,0,0);
+                switch(number) {
+                    case 1:
+                        fill(0,0,255);
+                        break;
+                    case 2:
+                        fill(0,153,0);
+                        break;
+                    case 3:
+                        fill(255,0,0);
+                        break;
+                    case 4:
+                        fill(0,0,51);
+                        break;
+                    case 5:
+                        fill(102,0,0);
+                        break;
+                    case 6:
+                        fill(0,153,153);
+                        break;
+                    case 7:
+                        fill(0,0,0);
+                        break;
+                    default:
+                        fill(160,160,160);
+                        break;
+                }
                 translate(10, 35);
-                text(bombCount(x, y), x * 40, y * 40);
+                text(number, x * 40, y * 40);
                 pop()
             }
 
@@ -137,11 +170,11 @@
         } else if (board[x][y] == "BOOM") {
             board[x][y] = "SAVEBOOM";
             fill(255, 255, 0);
-            rect(x * 40, y * 40, 40, 40);
+            image(img, x * 40, y * 40, 40, 40);
         } else if (board[x][y] == "") {
             board[x][y] = "SAVE";
             fill(255, 255, 0);
-            rect(x * 40, y * 40, 40, 40);
+            image(img, x * 40, y * 40, 40, 40);
         }
     }
 
